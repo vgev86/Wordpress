@@ -2,21 +2,17 @@ import subprocess
 import random
 import string
 
-# Generate random string of given length
 def generate_random_string(length):
     characters = string.ascii_letters + string.digits
     return ''.join(random.choice(characters) for _ in range(length))
 
-# Generate random 5-character database name, 6-character username, and 16-character password
 db_name = generate_random_string(5)
 db_username = generate_random_string(6)
 db_password = generate_random_string(16)
 
-# Ask for user input
 domain_name = input("Enter the domain name (e.g., example.com): ")
 email_address = input("Enter your email address: ")
 
-# List of commands
 commands = [
     "apt update",
     "apt upgrade -y",
@@ -54,11 +50,9 @@ commands = [
 
 ]
 
-# Run the commands
 for command in commands:
     subprocess.run(command, shell=True, check=True)
 
-# Server block configuration
 server_block = f"""
 # Server block configuration for {domain_name}
 server {{
@@ -128,15 +122,12 @@ server {{
 }}
 """
 
-# Write the server block configuration to the file
 with open(f"/etc/nginx/conf.d/{domain_name}.conf", "w") as config_file:
     config_file.write(server_block)
 
-# Run certbot command
-# certbot_command = f"certbot --nginx --agree-tos --redirect --hsts --staple-ocsp --email {email_address} -d {domain_name},www.{domain_name}"
-# subprocess.run(certbot_command, shell=True, check=True)
+ certbot_command = f"certbot --nginx --agree-tos --redirect --hsts --staple-ocsp --email {email_address} -d {domain_name},www.{domain_name}"
+ subprocess.run(certbot_command, shell=True, check=True)
 
-# Print database credentials
 print("Database Name:", db_name)
 print("Username:", db_username)
 print("Password:", db_password)
